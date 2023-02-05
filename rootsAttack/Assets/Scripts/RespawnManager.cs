@@ -6,7 +6,7 @@ public class RespawnManager : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject[] veggies;
-    public Transform veggieTarget; 
+    [SerializeField] public Transform[] veggieTarget; 
     public float spawnTimer; 
     // Start is called before the first frame update
     void Start()
@@ -26,10 +26,11 @@ public class RespawnManager : MonoBehaviour
         {
             yield return new WaitForSeconds(spawnTimer);
 
+            var c = Random.Range(0, veggieTarget.Length);
             var i = Random.Range(0, spawnPoints.Length);
             var v = Random.Range(0, veggies.Length);
             var go = Instantiate(veggies[v], spawnPoints[i].position, Quaternion.identity) as GameObject;
-            go.GetComponent<Icollect>().SetTarget(veggieTarget);
+            go.GetComponent<Icollect>().SetTarget(veggieTarget[c]);
         }
     }
 }

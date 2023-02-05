@@ -7,19 +7,26 @@ public class Player : MonoBehaviour
 {
     public float speed;
     public float jumpheight;
+    public float swingVelocity; // Angular velocity
+    public float swingDelay; // Swing
 
     public Transform cam;
     public Transform OLS; // over lapping sphere
 
     Rigidbody m_rb;
+    Rigidbody m_stick;
     Vector3 m_move;
     Transform m_orient;
-    GameObject veggie; 
+    GameObject veggie;
+    GameObject stick;
 
     // Start is called before the first frame update
     void Start()
     {
+        stick = GameObject.Find("WoodStick");
+        stick.SetActive(false);
         m_rb = GetComponent<Rigidbody>();
+        m_stick = stick.GetComponent<Rigidbody>();
         m_orient = new GameObject("Player Orientation").transform;
     }
 
@@ -51,6 +58,12 @@ public class Player : MonoBehaviour
         }
 
         m_rb.velocity = m_move;
+
+        /* Added code for the attack*/
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            
+        }
     }
 
     void LookForward()
@@ -66,6 +79,7 @@ public class Player : MonoBehaviour
     {
         if (veggie == null)
         {
+            /* This is interesting, I'll ask Noly later about it*/
             var c = Physics.OverlapSphere(OLS.position, OLS.localScale.x);
             foreach (var obj in c)
             {
@@ -93,5 +107,13 @@ public class Player : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(OLS.position, OLS.localScale.x);
+    }
+
+    IEnumerator SwingStick()
+    {
+        stick.SetActive(true);
+        yield return new WaitForSeconds(swingDelay);
+
+
     }
 }
